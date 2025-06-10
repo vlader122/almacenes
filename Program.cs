@@ -1,5 +1,7 @@
 using DB;
 using Microsoft.EntityFrameworkCore;
+using Repository;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,12 @@ builder.Services.AddDbContext<AlmacenesContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("AlmacenesConnection"));
 });
+
+//repository
+builder.Services.AddScoped<PersonalRepository>();
+
+//service
+builder.Services.AddScoped<PersonalService>();
 
 var app = builder.Build();
 
