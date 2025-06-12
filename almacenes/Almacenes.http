@@ -1,0 +1,6 @@
+@Almacenes_HostAddress = http://localhost:5161
+
+GET {{Almacenes_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
