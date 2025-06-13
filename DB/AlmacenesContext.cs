@@ -16,7 +16,9 @@ namespace DB
         public DbSet<Personal> Personales { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Item> Items { get; set; }
-
+        public DbSet<Proveedor> Proveedores { get; set; }
+        public DbSet<Entrega> Entregas { get; set; }
+        public DbSet<DetalleEntrega> DetalleEntregas { get; set; }
 
     }
 }

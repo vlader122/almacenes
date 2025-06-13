@@ -20,11 +20,18 @@ builder.Services.AddDbContext<AlmacenesContext>(options =>
 builder.Services.AddScoped<PersonalRepository>();
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<ItemRepository>();
+builder.Services.AddScoped<ProveedorRepository>();
+builder.Services.AddScoped<EntregaRepository>();
+builder.Services.AddScoped<DetalleEntregaRepository>();
 
 //service
 builder.Services.AddScoped<PersonalService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped<ProveedorService>();
+builder.Services.AddScoped<EntregaService>();
+builder.Services.AddScoped<DetalleEntregaService>();
+
 
 var app = builder.Build();
 

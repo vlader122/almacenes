@@ -3,6 +3,7 @@ using System;
 using DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DB.Migrations
 {
     [DbContext(typeof(AlmacenesContext))]
-    partial class AlmacenesContextModelSnapshot : ModelSnapshot
+    [Migration("20250613014221_Adicionando-entregas")]
+    partial class Adicionandoentregas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,32 +40,6 @@ namespace DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
-                });
-
-            modelBuilder.Entity("DB.Models.DetalleEntrega", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EntregaId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EntregaId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("DetalleEntregas");
                 });
 
             modelBuilder.Entity("DB.Models.Entrega", b =>
@@ -181,25 +158,6 @@ namespace DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Proveedores");
-                });
-
-            modelBuilder.Entity("DB.Models.DetalleEntrega", b =>
-                {
-                    b.HasOne("DB.Models.Entrega", "Entrega")
-                        .WithMany()
-                        .HasForeignKey("EntregaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DB.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Entrega");
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("DB.Models.Entrega", b =>
