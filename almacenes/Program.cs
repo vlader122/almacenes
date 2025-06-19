@@ -1,7 +1,10 @@
 using DB;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +15,28 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Ingrese el token JWT como: Bearer {token}",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
 builder.Services.AddDbContext<AlmacenesContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("AlmacenesConnection"));
 });
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<AlmacenesContext>();
 
 //repository
 builder.Services.AddScoped<PersonalRepository>();
@@ -53,6 +73,7 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "My APi");
     });
 }
+app.MapIdentityApi<IdentityUser>();
 
 app.UseAuthorization();
 
