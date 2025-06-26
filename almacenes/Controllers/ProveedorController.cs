@@ -1,4 +1,5 @@
-﻿using DB.Models;
+﻿using Almacenes.helper;
+using DB.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -16,9 +17,24 @@ namespace Almacenes.Controllers
             _proveedorService = proveedorService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Proveedor>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Proveedor>>> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return Ok(await _proveedorService.GetAll());
+            if (numeroPagina < 1 || tamañoPagina < 1)
+            {
+                return BadRequest("Datos de paginacion incorrectos");
+            }
+
+            List<Proveedor> proveedors;
+            int totalRegistros;
+            (proveedors, totalRegistros) = await _proveedorService.GetAll(numeroPagina, tamañoPagina);
+            ResponsePagination<Proveedor> pagination = new ResponsePagination<Proveedor>
+            {
+                TotalRegistros = totalRegistros,
+                NumeroPagina = numeroPagina,
+                TamanioPagina = tamañoPagina,
+                Datos = proveedors
+            };
+            return Ok(pagination);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Proveedor>> GetByid(int id)

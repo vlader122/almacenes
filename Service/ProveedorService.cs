@@ -26,9 +26,9 @@ namespace Service
             return _proveedorRepository.Delete(id);
         }
 
-        public async Task<List<Proveedor>> GetAll()
+        public async Task<(List<Proveedor>, int totalRegistros)> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return await _proveedorRepository.GetAll();
+            return await _proveedorRepository.GetAll(numeroPagina, tamañoPagina);
         }
 
         public async Task<Proveedor> GetById(int id)

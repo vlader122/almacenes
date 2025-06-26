@@ -1,4 +1,5 @@
-﻿using DB.Models;
+﻿using Almacenes.helper;
+using DB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,24 @@ namespace Almacenes.Controllers
             _categoriaService = categoriaService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Categoria>>> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return Ok(await _categoriaService.GetAll());
+            if (numeroPagina < 1 || tamañoPagina < 1)
+            {
+                return BadRequest("Datos de paginacion incorrectos");
+            }
+
+            List<Categoria> categorias;
+            int totalRegistros;
+            (categorias, totalRegistros) = await _categoriaService.GetAll(numeroPagina, tamañoPagina);
+            ResponsePagination<Categoria> pagination = new ResponsePagination<Categoria>
+            {
+                TotalRegistros = totalRegistros,
+                NumeroPagina = numeroPagina,
+                TamanioPagina = tamañoPagina,
+                Datos = categorias
+            };
+            return Ok(pagination);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> GetByid(int id)

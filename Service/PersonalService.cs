@@ -26,9 +26,9 @@ namespace Service
             return _personalRepository.Delete(id);
         }
 
-        public async Task<List<Personal>> GetAll()
+        public Task<(List<Personal>, int totalRegistros)> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return await _personalRepository.GetAll();
+            return _personalRepository.GetAll(numeroPagina, tamañoPagina);
         }
 
         public async Task<Personal> GetById(int id)

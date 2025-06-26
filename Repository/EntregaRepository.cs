@@ -36,9 +36,15 @@ namespace Repository
             return null;
         }
 
-        public async Task<List<Entrega>> GetAll()
+        public async Task<(List<Entrega>, int totalRegistros)> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return await _context.Entregas.Include(de=>de.DetalleEntrega).ToListAsync();
+            IQueryable<Entrega> query = _context.Entregas.AsQueryable();
+            int totalRegistros = await query.CountAsync();
+            List<Entrega> entregas = await query
+                .Skip((numeroPagina - 1) * tamañoPagina)
+                .Take(tamañoPagina)
+                .ToListAsync();
+            return (entregas, totalRegistros);
         }
 
         public async Task<Entrega> GetById(int id)

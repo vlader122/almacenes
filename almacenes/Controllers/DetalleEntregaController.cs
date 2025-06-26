@@ -1,4 +1,5 @@
-﻿using DB.Models;
+﻿using Almacenes.helper;
+using DB.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -16,9 +17,24 @@ namespace Almacenes.Controllers
             _detalleEntregaService = detalleEntregaService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetalleEntrega>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DetalleEntrega>>> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return Ok(await _detalleEntregaService.GetAll());
+            if (numeroPagina < 1 || tamañoPagina < 1)
+            {
+                return BadRequest("Datos de paginacion incorrectos");
+            }
+
+            List<DetalleEntrega> detalles;
+            int totalRegistros;
+            (detalles, totalRegistros) = await _detalleEntregaService.GetAll(numeroPagina, tamañoPagina);
+            ResponsePagination<DetalleEntrega> pagination = new ResponsePagination<DetalleEntrega>
+            {
+                TotalRegistros = totalRegistros,
+                NumeroPagina = numeroPagina,
+                TamanioPagina = tamañoPagina,
+                Datos = detalles
+            };
+            return Ok(pagination);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<DetalleEntrega>> GetByid(int id)

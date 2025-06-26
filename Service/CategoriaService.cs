@@ -26,9 +26,9 @@ namespace Service
             return _categoriaRepository.Delete(id);
         }
 
-        public async Task<List<Categoria>> GetAll()
+        public async Task<(List<Categoria>, int totalRegistros)> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return await _categoriaRepository.GetAll();
+            return await _categoriaRepository.GetAll(numeroPagina, tamañoPagina);
         }
 
         public async Task<Categoria> GetById(int id)

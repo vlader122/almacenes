@@ -26,9 +26,9 @@ namespace Service
             return _itemRepository.Delete(id);
         }
 
-        public async Task<List<Item>> GetAll()
+        public async Task<(List<Item>, int totalRegistros)> GetAll(int numeroPagina, int tamañoPagina)
         {
-            return await _itemRepository.GetAll();
+            return await _itemRepository.GetAll(numeroPagina, tamañoPagina);
         }
 
         public async Task<Item> GetById(int id)
