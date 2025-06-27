@@ -53,6 +53,7 @@ builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<ProveedorService>();
 builder.Services.AddScoped<EntregaService>();
 builder.Services.AddScoped<DetalleEntregaService>();
+builder.Services.AddScoped<FileService>();
 
 
 var app = builder.Build();
