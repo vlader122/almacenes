@@ -55,6 +55,16 @@ builder.Services.AddScoped<EntregaService>();
 builder.Services.AddScoped<DetalleEntregaService>();
 builder.Services.AddScoped<FileService>();
 
+builder.Services.AddCors( options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
@@ -78,6 +88,7 @@ app.MapIdentityApi<IdentityUser>();
 
 app.UseAuthorization();
 
+app.UseCors("AllowAngular");
 app.MapControllers();
 
 app.Run();

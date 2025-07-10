@@ -17,12 +17,21 @@ namespace Almacenes.Controllers
             _personalService = personalService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Personal>>> GetAll(int numeroPagina, int tamañoPagina)
+        public async Task<ActionResult<IEnumerable<Personal>>> GetAll(int numeroPagina, int tamañoPagina, bool pag = true)
         {
-            if (numeroPagina < 1 || tamañoPagina < 1)
+            if (pag)
             {
-                return BadRequest("Datos de paginacion incorrectos");
+                if (numeroPagina < 1 || tamañoPagina < 1)
+                {
+                    return BadRequest("Datos de paginacion incorrectos");
+                }
             }
+            else
+            {
+                numeroPagina = 0;
+                tamañoPagina = 0;
+            }
+
 
             List<Personal> personals;
             int totalRegistros;
