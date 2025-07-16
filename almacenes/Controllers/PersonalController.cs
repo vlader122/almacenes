@@ -1,4 +1,5 @@
 ﻿using Almacenes.helper;
+using DB.dtos;
 using DB.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace Almacenes.Controllers
             _personalService = personalService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Personal>>> GetAll(int numeroPagina, int tamañoPagina, bool pag = true)
+        public async Task<ActionResult<IEnumerable<Personal>>> GetAll(int numeroPagina, int tamañoPagina, bool pag = true, bool withDto = false)
         {
             if (pag)
             {
@@ -32,18 +33,35 @@ namespace Almacenes.Controllers
                 tamañoPagina = 0;
             }
 
-
-            List<Personal> personals;
-            int totalRegistros;
-            (personals, totalRegistros) = await _personalService.GetAll(numeroPagina, tamañoPagina);
-            ResponsePagination<Personal> pagination = new ResponsePagination<Personal>
+            if (withDto)
             {
-                TotalRegistros = totalRegistros,
-                NumeroPagina = numeroPagina,
-                TamanioPagina = tamañoPagina,
-                Datos = personals
-            };
-            return Ok(pagination);
+                List<PersonalDto> personals;
+                int totalRegistros;
+                (personals, totalRegistros) = await _personalService.GetAllWithDto(numeroPagina, tamañoPagina);
+                ResponsePagination<PersonalDto> pagination = new ResponsePagination<PersonalDto>
+                {
+                    TotalRegistros = totalRegistros,
+                    NumeroPagina = numeroPagina,
+                    TamanioPagina = tamañoPagina,
+                    Datos = personals
+                };
+                return Ok(pagination);
+            }
+            else
+            {
+                List<Personal> personals;
+                int totalRegistros;
+                (personals, totalRegistros) = await _personalService.GetAll(numeroPagina, tamañoPagina);
+                ResponsePagination<Personal> pagination = new ResponsePagination<Personal>
+                {
+                    TotalRegistros = totalRegistros,
+                    NumeroPagina = numeroPagina,
+                    TamanioPagina = tamañoPagina,
+                    Datos = personals
+                };
+                return Ok(pagination);
+            }
+
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Personal>> GetByid(int id)

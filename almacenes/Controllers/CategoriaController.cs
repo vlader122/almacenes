@@ -10,8 +10,7 @@ namespace Almacenes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class CategoriaController : ControllerBase
+        public class CategoriaController : ControllerBase
     {
         public readonly CategoriaService _categoriaService;
         public CategoriaController(CategoriaService categoriaService)
