@@ -1,6 +1,7 @@
 ﻿using Almacenes.helper;
 using DB.dtos;
 using DB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -10,6 +11,7 @@ namespace Almacenes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PersonalController : ControllerBase
     {
         public readonly PersonalService _personalService;

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Service;
 
 namespace Almacenes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class FileController : ControllerBase
     {
         private readonly FileService _fileService;
@@ -13,9 +15,9 @@ namespace Almacenes.Controllers
         {
             _fileService = fileService;
         }
-
-        [HttpPost("subir/{id}")]
-        public async Task<IActionResult> SubirArchivo([FromForm] string recurso, int id, [FromForm] IFormFile file)
+        [Authorize]
+        [HttpPost("subir/{recurso}/{id}")]
+        public async Task<IActionResult> SubirArchivo(string recurso, int id, [FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
